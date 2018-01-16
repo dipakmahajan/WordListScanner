@@ -7,6 +7,7 @@
 # Assumptions:
  1. Only text files are accepted
  2. Text file is supposed to contain one word per line
+ 3. The application can be optimized further for performance
 
 # Approach
  - Parallel tasks are created to check if a word is constructed by concatenating copies of shorter words also found in the file
