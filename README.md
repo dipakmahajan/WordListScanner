@@ -1,2 +1,15 @@
 # WordListScanner
-Application to scan list of words
+ It is is a simple program which parses a text file and finds following things in it.
+ 1. The longest word in the file that can be constructed by concatenating copies of shorter words also found in the file
+ 2. The second longest word found as well
+ 3. Total count of words in the list can be constructed of other words in the list
+
+# Assumptions:
+ 1. Only text files are accepted
+ 2. Text file is supposed to contain one word per line
+
+# Approach
+   Parallel tasks are created to check if a word is constructed by concatenating copies of shorter words also found in the file.
+   ConcurrentBag collects all combination words from parallel tasks.
+   Finally, this ConcurrentBag is used to get the stats.
+   Since the task can be long running, results are logged into text file.
