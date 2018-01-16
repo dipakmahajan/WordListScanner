@@ -9,7 +9,13 @@
  2. Text file is supposed to contain one word per line
 
 # Approach
-   - Parallel tasks are created to check if a word is constructed by concatenating copies of shorter words also found in the file.
-   - ConcurrentBag collects all combination words from parallel tasks.
-   - Finally, this ConcurrentBag is used to get the stats.
-   - Since the task can be long running, results are logged into text file.
+ - Parallel tasks are created to check if a word is constructed by concatenating copies of shorter words also found in the file
+ - ConcurrentBag collects all combination words from parallel tasks
+ - Finally, this ConcurrentBag is used to get the stats
+ - Since the task can be long running, results are logged into text file
+
+# Sample Results
+Code include couple of word lists for testing. The result for test fiel LargeList.txt
+ - Largest combination word : {largestCombination}, having length {largestCombination.Length}
+ - Second Largest combination word : {secondLargestCombination}, having length {secondLargestCombination.Length}
+ - Total '{combinationCount}' words in the list can be constructed of other words in the list
