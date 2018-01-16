@@ -4,11 +4,11 @@
  2. The second longest word found as well
  3. Total count of words in the list can be constructed of other words in the list
 
-# Assumptions:
+## Assumptions:
  1. Only text files are accepted
  2. Text file is supposed to contain one word per line
 
-# Approach
+## Approach
  - Parallel tasks are created to check if a word is constructed by concatenating copies of shorter words also found in the file
  - ConcurrentBag collects all combination words from parallel tasks
  - Finally, this ConcurrentBag is used to get the stats
@@ -16,7 +16,7 @@
  - The application can be optimized further for performance
  - Logging is not configurable yet. Making default log level to error would increase some performance
 
-# Sample Results
+## Sample Results
 Code include couple of word lists for testing. The result for test fiel LargeList.txt
  - Largest combination word : 'electroencephalographically', having length 27
  - Second Largest combination word : 'ethylenediaminetetraacetate', having length 27
