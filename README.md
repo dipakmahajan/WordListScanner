@@ -13,7 +13,7 @@
  - ConcurrentBag collects all combination words from parallel tasks
  - Finally, this ConcurrentBag is used to get the stats
  - Since the task can be long running, results are logged into text file
- - The application can be optimized further for performance
+ - The application is created in limited time, can be optimized further for performance
  - Logging is not configurable yet. Making default log level to error would increase some performance
 
 ## Sample Results
