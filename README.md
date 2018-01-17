@@ -14,6 +14,7 @@
  - Finally, this ConcurrentBag is used to get the stats
  - Since the task can be long running, results are logged into text file
  - The application is created in limited time, can be optimized further for performance
+ - Current scanner uses .Contains(). Will be splitting word list into 26 arrays, each array containing words starting from separate letter and uses .StartsWith() function instead of .Contains() to improve performance
  - Logging is not configurable yet. Making default log level to error would increase some performance
 
 ## Sample Results
