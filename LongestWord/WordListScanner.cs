@@ -104,7 +104,9 @@ namespace LongestWord
         private bool IsCombinationWord(string word)
         {
             var localCopy = String.Copy(word);
-
+            // TODO: Split Words list into 26 arrays, each containing words starting with different english alphabet
+            // Instead of .Contains(), use .StartsWith() which would lead much better performance since data being scanned
+            // would be split across
             var matchedParts = this.Words.Where(w => word.Contains(w) && !word.Equals(w)).OrderByDescending(w => w.Length);
             if (!matchedParts.Any())
             {
