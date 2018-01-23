@@ -18,7 +18,7 @@
 
 ## Sample Results
 Code include couple of word lists for testing. The result for test file named LargeList.txt is
- - Largest combination word : 'electroencephalographically', having length 27
+ - Largest combination word : 'ethylenediaminetetraacetates', having length 28
  - Second Largest combination word : 'ethylenediaminetetraacetate', having length 27
  - Total '50325' words in the list can be constructed of other words in the list
  - Time it took to calculate result is '13' minutes
