@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +24,20 @@ namespace LongestWord
                 throw new ArgumentException("Word List does not contain any words.");
             }
 
-            this.Words = words.OrderByDescending(w => w.Length).ToList().ConvertAll(w => w.ToLower());
+            this.words = words.OrderByDescending(w => w.Length).ToList().ConvertAll(w => w.ToLower());
+            this.PopulateDictionary();
         }
 
         /// <summary>
-        /// Gets the list of words (in lower case) in the provided word list in descending order by length
+        /// The list of words (in lower case) in the provided word list in descending order by length
         /// </summary>
-        public List<string> Words { get; private set; }
+        private List<string> words;
+
+        /// <summary>
+        /// Dictionary of words with key as alphabet starting all words in it
+        /// list of words is in descending order by length
+        /// </summary>
+        private Dictionary<char, IEnumerable<string>> dictionary = new Dictionary<char, IEnumerable<string>>();
 
         /// <summary>
         /// Prints combination word stats
@@ -66,9 +73,8 @@ namespace LongestWord
         private ConcurrentBag<string> GetCombinations()
         {
             var combinations = new ConcurrentBag<string>();
-
             var taskList = new List<Task>();
-            var chunks = this.Words.Chunk(Constants.MaxParallelTasks);
+            var chunks = this.words.Chunk(Constants.MaxParallelTasks);
             var chunkCount = chunks.Count();
             for (int i = 0; i < chunkCount; i++)
             {
@@ -76,7 +82,7 @@ namespace LongestWord
                     new ParallelOptions { MaxDegreeOfParallelism = Constants.MaxParallelTasks },
                     (w, loopState, returnVal) =>
                     {
-                        if (IsCombinationWord(w))
+                        if (IsCombinationWord(w, String.Copy(w)))
                         {
                             combinations.Add(w);
                         }
@@ -101,33 +107,36 @@ namespace LongestWord
             return combinations;
         }
 
-        private bool IsCombinationWord(string word)
+        private bool IsCombinationWord(string originalWord, string word)
         {
-            var localCopy = String.Copy(word);
-            // TODO: Split Words list into 26 arrays, each containing words starting with different english alphabet
-            // Instead of .Contains(), use .StartsWith() which would lead much better performance since data being scanned
-            // would be split across
-            var matchedParts = this.Words.Where(w => word.Contains(w) && !word.Equals(w)).OrderByDescending(w => w.Length);
-            if (!matchedParts.Any())
+            if(word.Length == 0)
             {
                 return false;
             }
 
-            foreach (var matchedPart in matchedParts)
+            var matchedPart = this.dictionary[word[0]].FirstOrDefault(w => word.StartsWith(w) && w.Equals(originalWord, StringComparison.OrdinalIgnoreCase));
+            if (string.IsNullOrWhiteSpace(matchedPart))
             {
-                localCopy = localCopy.Replace(matchedPart, string.Empty);
-                if (localCopy.Length == 0)
-                {
-                    break;
-                }
+                return false;
             }
 
-            if (localCopy.Length == 0)
+            word = word.Replace(matchedPart, string.Empty);
+
+            if (word.Length == 0)
             {
                 return true;
             }
 
-            return false;
+            return IsCombinationWord(originalWord, word);
+        }
+
+        private void PopulateDictionary()
+        {
+            var alphabets = "abcdefghijklmnopqrstuvwxyz";
+            foreach (char alphabet in alphabets)
+            {
+                this.dictionary.Add(alphabet, this.words.Where(w => w.StartsWith(alphabet.ToString())).OrderByDescending(w => w.Length));
+            }
         }
     }
 }
