@@ -26,6 +26,7 @@ namespace LongestWord
 
             this.words = words.OrderByDescending(w => w.Length).ToList().ConvertAll(w => w.ToLower());
             this.PopulateDictionary();
+            this.PopulateMinLength();
         }
 
         /// <summary>
@@ -38,6 +39,8 @@ namespace LongestWord
         /// list of words is in descending order by length
         /// </summary>
         private Dictionary<char, IEnumerable<string>> dictionary = new Dictionary<char, IEnumerable<string>>();
+
+        private int minLength = 0;
 
         /// <summary>
         /// Prints combination word stats
@@ -114,20 +117,25 @@ namespace LongestWord
                 return false;
             }
 
-            var matchedPart = this.dictionary[word[0]].FirstOrDefault(w => word.StartsWith(w) && !w.Equals(originalWord, StringComparison.OrdinalIgnoreCase));
-            if (string.IsNullOrWhiteSpace(matchedPart))
+            var matchedParts = this.dictionary[word[0]].Where(w => word.StartsWith(w) && !w.Equals(originalWord, StringComparison.OrdinalIgnoreCase)).Take(2);
+            if (!matchedParts.Any())
             {
                 return false;
             }
 
-            word = word.Replace(matchedPart, string.Empty);
+            var replacedWord = word.Replace(matchedParts.First(), string.Empty);
 
-            if (word.Length == 0)
+            if (replacedWord.Length == 0)
             {
                 return true;
             }
 
-            return IsCombinationWord(originalWord, word);
+            if(replacedWord.Length < this.minLength && matchedParts.Count() > 1)
+            {
+                replacedWord = word.Replace(matchedParts.ElementAt(1), string.Empty);
+            }
+
+            return IsCombinationWord(originalWord, replacedWord);
         }
 
         private void PopulateDictionary()
@@ -135,8 +143,14 @@ namespace LongestWord
             var alphabets = "abcdefghijklmnopqrstuvwxyz";
             foreach (char alphabet in alphabets)
             {
-                this.dictionary.Add(alphabet, this.words.Where(w => w.StartsWith(alphabet.ToString())).OrderByDescending(w => w.Length));
+                this.dictionary.Add(alphabet, this.words.Where(w => w.StartsWith(alphabet.ToString())));
             }
+        }
+
+        private void PopulateMinLength()
+        {
+            // this.words is already ordered by length
+            this.minLength = this.words.Last().Length;
         }
     }
 }
