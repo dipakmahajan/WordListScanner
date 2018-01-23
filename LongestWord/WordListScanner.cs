@@ -88,7 +88,7 @@ namespace LongestWord
                         }
                     });
 
-                if (i % 10 == 0)
+                if (i % 100 == 0)
                 {
                     taskList.Add(Logger.LogInfoAsync($"Scanned {i + 1} chunks of word list out of {chunkCount}"));
                 }
