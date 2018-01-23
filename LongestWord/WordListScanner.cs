@@ -114,7 +114,7 @@ namespace LongestWord
                 return false;
             }
 
-            var matchedPart = this.dictionary[word[0]].FirstOrDefault(w => word.StartsWith(w) && w.Equals(originalWord, StringComparison.OrdinalIgnoreCase));
+            var matchedPart = this.dictionary[word[0]].FirstOrDefault(w => word.StartsWith(w) && !w.Equals(originalWord, StringComparison.OrdinalIgnoreCase));
             if (string.IsNullOrWhiteSpace(matchedPart))
             {
                 return false;
